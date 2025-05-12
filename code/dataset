@@ -1,0 +1,25 @@
+# Load your dataset
+import pandas as pd
+df = pd.read_csv("medical_appointments_dirty.csv")
+
+# Step 1: Remove duplicate rows
+df = df.drop_duplicates()
+
+# Step 2: Standardize 'Gender' values
+df['Gender'] = df['Gender'].replace({
+    'M': 'Male', 'male': 'Male',
+    'F': 'Female', 'female': 'Female'
+})
+
+# Step 3: Standardize 'No-show' values
+df['No-show'] = df['No-show'].replace({
+    'Yes': 'Yes', 'yes': 'Yes',
+    'No': 'No', 'NO': 'No', None: np.nan
+})
+
+# Step 4: Convert date columns to datetime
+df['ScheduledDay'] = pd.to_datetime(df['ScheduledDay'], errors='coerce')
+df['AppointmentDay'] = pd.to_datetime(df['AppointmentDay'], errors='coerce')
+
+# Step 5: Drop rows with any missing values
+df = df.dropna()
